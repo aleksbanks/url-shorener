@@ -1,4 +1,29 @@
 <div class="container">
-    <h1>{{title}}</h1>
-    <p>Welcome to {{title}}</p>
+  <h1 class="d-flex justify-content-center mb-3">{{title}}</h1>
+  <p class="d-flex justify-content-center mb-3">Welcome to {{title}}</p>
+</div>
+
+<div class="d-flex justify-content-center mb-3">
+  <form type="text" action="/urls" method="POST" class="d-flex flex-column align-items-center mb-5">
+    <div class="mb-3">
+      <input type="text" name="longUrl" placeholder="Insert your URL" class="form-control" id="exampleInputEmail1"
+        aria-describedby="emailHelp">
+    </div>
+    <button type="submit" class="btn btn-primary">Отправить!</button>
+  </form>
+</div>
+
+<div class="d-flex justify-content-center mb-3 link-danger">
+  {{#if errorMessage}}
+  <span>{{errorMessage}}</span>
+  {{/if}}
+</div>
+
+<div class="d-flex flex-column align-items-center">
+  {{#each allLinks}}
+  <div class="card " style="width: 40rem;">
+    <p>{{this.longUrl}}</p>
+    <a href="{{this.longUrl}}">http://localhost:3000/{{this.shortUrl}}</a>
+  </div>
+  {{/each}}
 </div>
