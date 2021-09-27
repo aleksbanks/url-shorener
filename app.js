@@ -30,6 +30,7 @@ async function makeShortUrl() {
   const allShortUrls = await Url.findOne({
     where: { shortUrl: result }
   })
+
   if (!allShortUrls) {
     return result
   }
@@ -44,19 +45,24 @@ app.post('/urls', async function (req, res) {
     // Автоматически создаются короткие  URL
     // В конце надо вернуться обратно на домашнюю страницу
     const randomShort = await makeShortUrl()
-
-    const urlObj = await Url.create({
-      longUrl: req.body.longUrl,
-      shortUrl: randomShort
+    console.log(req.body.longUrl);
+    const allLongUrls = await Url.findOne({
+      where: { longUrl: req.body.longUrl }
     })
+    if (!allLongUrls) {
+      const urlObj = await Url.create({
+        longUrl: req.body.longUrl,
+        shortUrl: randomShort
+      })
+    } else {
+      const errorMessage = 'Такая ссылка уже добавлялась'
+      res.redirect(`/?error=${errorMessage}`)
+    }
 
     res.redirect('/')
   } catch (error) {
-    console.log(error.message)
     res.redirect(`/?error=${error.message}`)
   }
-
-
 });
 
 app.get('/:shortUrl', async function (req, res, next) {
